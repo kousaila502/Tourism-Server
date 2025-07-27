@@ -70,12 +70,10 @@ const UserSchema = new mongoose.Schema({
     // Agency-specific fields
     certification: {
         type: String,
-        required: function() { return this.role === 'Agency'; }
     },
     classification: {
         type: String,
         enum: ['Budget', 'Standard', 'Premium', 'Luxury'],
-        required: function() { return this.role === 'Agency'; }
     },
     rate: {
         type: Number,
