@@ -1,8 +1,9 @@
 const {Router}= require('express');
 const router = Router();
-const quetionsController = require('../controllers/questions');     
+const contentController = require('../controllers/ContentController');     
 const multer = require('multer')
 const { requireAuth } = require('../middleware/authMiddleware');
+
 const Storage = multer.diskStorage({
     destination: function(req,file,cb){
         cb(null,'./uploads')
@@ -14,18 +15,12 @@ const Storage = multer.diskStorage({
 
 const upload = multer({storage: Storage})
 
-
-
-router.get('/discuss/questions',quetionsController.getQuestions)
-router.post('/discuss/questions',[upload.single('picture'),requireAuth],quetionsController.createQuestions)
+// Question routes
+router.get('/discuss/questions',contentController.getQuestions)
+router.post('/discuss/questions',[upload.single('picture'),requireAuth],contentController.createQuestions)
 router.route('/discuss/questions/:id')
-            .delete(quetionsController.deleteQuestions)
-            .patch(upload.single('picture'),quetionsController.updateQuestions)
-            .get(quetionsController.getsinglequestion)
-
-
-
-
-
+            .delete(contentController.deleteQuestions)
+            .patch(upload.single('picture'),contentController.updateQuestions)
+            .get(contentController.getSingleQuestion)
 
 module.exports = router;
