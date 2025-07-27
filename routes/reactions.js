@@ -1,20 +1,25 @@
-const {Router}= require('express');
+const {Router} = require('express');
 const router = Router();
-const reactionsController = require('../controllers/reactions'); 
+const interactionController = require('../controllers/InteractionController');
 
+// Question reactions
+router.route('/discuss/questions/:questionid/like/').post(interactionController.likeContent)
+router.route('/discuss/questions/:questionid/dislike/').post(interactionController.dislikeContent)
 
+// Reply reactions  
+router.route('/discuss/questions/:questionid/reply/:replyid/like/').post(interactionController.likeReply)
+router.route('/discuss/questions/:questionid/reply/:replyid/dislike/').post(interactionController.dislikeReply)
 
-router.route('/discuss/questions/:questionid/like/').post(reactionsController.createlikequestion)
-router.route('/discuss/questions/:questionid/dislike/').post(reactionsController.createdislikequestion)
-router.route('/discuss/questions/:questionid/reply/:replyid/like/').post(reactionsController.createlikereply)
-router.route('/discuss/questions/:questionid/reply/:replyid/dislike/').post(reactionsController.createdislikereply)
-router.route('/news/trips/:tripid/like').post(reactionsController.createliketrip)
-router.route('/news/trips/:tripid/dislike').post(reactionsController.createdisliketrip)
-router.route('/news/trips/:tripid/reply/:replyid/like').post(reactionsController.createliketripreply)
-router.route('/news/trips/:tripid/reply/:replyid/dislike').post(reactionsController.createdisliketripreply)
+// Trip reactions
+router.route('/news/trips/:tripid/like').post(interactionController.likeContent)
+router.route('/news/trips/:tripid/dislike').post(interactionController.dislikeContent)
 
-router.route('/story/:idLocation/:idPicture/like').post(reactionsController.createlikepicture)
-router.route('/story/:idLocation/:idPicture/dislike').post(reactionsController.createdislikepicture)
+// Trip reply reactions
+router.route('/news/trips/:tripid/reply/:replyid/like').post(interactionController.likeReply)
+router.route('/news/trips/:tripid/reply/:replyid/dislike').post(interactionController.dislikeReply)
 
+// Story reactions
+router.route('/story/:idLocation/:idPicture/like').post(interactionController.likeContent)
+router.route('/story/:idLocation/:idPicture/dislike').post(interactionController.dislikeContent)
 
 module.exports = router;

@@ -1,19 +1,12 @@
-const {Router}= require('express');
+const {Router} = require('express');
 const router = Router();
-const reviewsController = require('../controllers/reviews');     
+const interactionController = require('../controllers/InteractionController');
 
-
-
-
-router.get('/agency/:agencyId/reviews', reviewsController.getReviews)
-router.post('/agency/:agencyId/reviews',reviewsController.createReviews)
+// Agency reviews
+router.get('/agency/:agencyId/reviews', interactionController.getReviews)
+router.post('/agency/:agencyId/reviews', interactionController.createReviews)
 router.route('/agency/:agencyId/reviews/:id')
-            .delete(reviewsController.deleteReviews)
-            .patch(reviewsController.updateReviews)
-
-
-
-
-
+            .delete(interactionController.deleteReviews)
+            .patch(interactionController.updateReviews)
 
 module.exports = router;

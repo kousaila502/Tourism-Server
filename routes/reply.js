@@ -1,7 +1,7 @@
-const {Router}= require('express');
+const {Router} = require('express');
 const router = Router();
-const replyController = require('../controllers/reply');     
-      
+const interactionController = require('../controllers/InteractionController');
+
 const multer = require('multer')
 
 const Storage = multer.diskStorage({
@@ -15,21 +15,14 @@ const Storage = multer.diskStorage({
 
 const upload = multer({storage: Storage})
 
-
-
-
-
+// Question replies
 router.route('/discuss/questions/:questionId/reply/:replyId')
-            .delete(replyController.deleteReply)
-            .patch(upload.single('picture'),replyController.updateReply)
-            .get(replyController.getsinglereply)
+            .delete(interactionController.deleteReply)
+            .patch(upload.single('picture'),interactionController.updateReply)
+            .get(interactionController.getSingleReply)
+
 router.route('/discuss/questions/:questionId/reply/')
-            .get(replyController.getReply)
-            .post(upload.single('picture'),replyController.createReply)
-
-
-
-
-
+            .get(interactionController.getReplies)
+            .post(upload.single('picture'),interactionController.createReply)
 
 module.exports = router;
