@@ -116,3 +116,5 @@ backup/
 # Testing
 test-results/
 coverage/
+
+.history/
