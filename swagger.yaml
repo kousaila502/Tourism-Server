@@ -1,0 +1,756 @@
+openapi: 3.0.3
+info:
+  title: Tourism Server API
+  description: |
+    Backend server for Android tourism app promoting Algerian destinations. 
+    REST API providing tourist guides, recommendations, social features, and agency integration 
+    with secure authentication and data management.
+    
+    ## Features
+    - 🏛️ Tourist guides (regions, states, places)
+    - 📍 Location-based recommendations
+    - 📱 Social features (stories, discussions)
+    - 🏢 Travel agency management
+    - 🔐 Secure authentication & authorization
+    - 📸 File upload capabilities
+    - ⭐ Reviews and ratings system
+  version: 1.0.0
+  contact:
+    name: Tourism Server API
+    url: https://github.com/kousaila502/Tourism-Server
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:5000
+    description: Development server
+  - url: https://your-production-domain.com
+    description: Production server
+
+tags:
+  - name: Authentication
+    description: User registration, login, and verification
+  - name: Agencies
+    description: Travel agency management
+  - name: Users
+    description: User profile management
+  - name: Trips
+    description: Trip posting and management
+  - name: Questions
+    description: Discussion forum functionality
+  - name: Replies
+    description: Reply management for questions and trips
+  - name: Reactions
+    description: Like/dislike functionality
+  - name: Stories
+    description: Photo sharing features
+  - name: Reviews
+    description: Agency reviews and ratings
+  - name: Favorites
+    description: User favorites management
+  - name: Social
+    description: Follow system
+  - name: Utilities
+    description: Filtering and search
+
+paths:
+  # Authentication Endpoints
+  /login:
+    post:
+      tags:
+        - Authentication
+      summary: User/Agency Login
+      description: Authenticate user or agency with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: agency@example.com
+                password:
+                  type: string
+                  format: password
+                  example: password123
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  token:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          description: Invalid credentials
+
+  /signupAgency:
+    post:
+      tags:
+        - Authentication
+      summary: Register new agency
+      description: Register a new travel agency
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+                - password
+                - location
+              properties:
+                name:
+                  type: string
+                  example: "Algeria Tours"
+                email:
+                  type: string
+                  format: email
+                  example: agency@example.com
+                password:
+                  type: string
+                  format: password
+                  example: password123
+                location:
+                  type: string
+                  example: "Algiers, Algeria"
+                phoneNumber:
+                  type: string
+                  example: "+213123456789"
+                photo:
+                  type: string
+                  format: binary
+                  description: Agency profile photo
+      responses:
+        '201':
+          description: Agency registered successfully
+        '400':
+          description: Validation error
+
+  /signupUser:
+    post:
+      tags:
+        - Authentication
+      summary: Register new user
+      description: Register a new tourist user
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+                - password
+              properties:
+                name:
+                  type: string
+                  example: "John Doe"
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                password:
+                  type: string
+                  format: password
+                  example: password123
+                photo:
+                  type: string
+                  format: binary
+                  description: User profile photo
+      responses:
+        '201':
+          description: User registered successfully
+        '400':
+          description: Validation error
+
+  /logout:
+    get:
+      tags:
+        - Authentication
+      summary: Logout user
+      description: Logout current user/agency
+      responses:
+        '200':
+          description: Logout successful
+
+  /verifyotp:
+    post:
+      tags:
+        - Authentication
+      summary: Verify OTP
+      description: Verify email with OTP code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - otp
+              properties:
+                email:
+                  type: string
+                  format: email
+                otp:
+                  type: string
+                  example: "123456"
+      responses:
+        '200':
+          description: OTP verified successfully
+        '400':
+          description: Invalid OTP
+
+  # Trips Endpoints
+  /news/trips:
+    get:
+      tags:
+        - Trips
+      summary: Get all trips
+      description: Retrieve all available trips
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: List of trips
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trip'
+
+    post:
+      tags:
+        - Trips
+      summary: Create new trip
+      description: Create a new trip (agencies only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - title
+                - description
+                - destination
+                - price
+              properties:
+                title:
+                  type: string
+                  example: "Sahara Desert Adventure"
+                description:
+                  type: string
+                  example: "3-day camel trekking in Sahara"
+                destination:
+                  type: string
+                  example: "Tamanrasset"
+                price:
+                  type: number
+                  example: 299.99
+                duration:
+                  type: string
+                  example: "3 days"
+                picture:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Trip created successfully
+        '401':
+          description: Unauthorized
+        '403':
+          description: Only agencies can create trips
+
+  /news/Trips/{tripid}:
+    get:
+      tags:
+        - Trips
+      summary: Get single trip
+      parameters:
+        - name: tripid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Trip details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trip'
+
+    patch:
+      tags:
+        - Trips
+      summary: Update trip
+      parameters:
+        - name: tripid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+                picture:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Trip updated successfully
+
+    delete:
+      tags:
+        - Trips
+      summary: Delete trip
+      parameters:
+        - name: tripid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Trip deleted successfully
+
+  # Questions Endpoints
+  /discuss/questions:
+    get:
+      tags:
+        - Questions
+      summary: Get all questions
+      description: Retrieve all discussion questions
+      responses:
+        '200':
+          description: List of questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Question'
+
+    post:
+      tags:
+        - Questions
+      summary: Create new question
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - title
+                - content
+              properties:
+                title:
+                  type: string
+                  example: "Best places to visit in Algiers?"
+                content:
+                  type: string
+                  example: "I'm planning a trip to Algiers..."
+                picture:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Question created successfully
+
+  /discuss/questions/{id}:
+    get:
+      tags:
+        - Questions
+      summary: Get single question
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Question details
+
+    patch:
+      tags:
+        - Questions
+      summary: Update question
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                picture:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Question updated successfully
+
+    delete:
+      tags:
+        - Questions
+      summary: Delete question
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Question deleted successfully
+
+  # Reactions Endpoints
+  /discuss/questions/{questionid}/like:
+    post:
+      tags:
+        - Reactions
+      summary: Like a question
+      parameters:
+        - name: questionid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Question liked successfully
+
+  /discuss/questions/{questionid}/dislike:
+    post:
+      tags:
+        - Reactions
+      summary: Dislike a question
+      parameters:
+        - name: questionid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Question disliked successfully
+
+  # Stories Endpoints
+  /story/{idLocation}:
+    get:
+      tags:
+        - Stories
+      summary: Get stories by location
+      parameters:
+        - name: idLocation
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Stories for location
+
+    post:
+      tags:
+        - Stories
+      summary: Create new story
+      parameters:
+        - name: idLocation
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - picture
+              properties:
+                picture:
+                  type: string
+                  format: binary
+                caption:
+                  type: string
+      responses:
+        '201':
+          description: Story created successfully
+
+  # Reviews Endpoints
+  /agency/{agencyId}/reviews:
+    get:
+      tags:
+        - Reviews
+      summary: Get agency reviews
+      parameters:
+        - name: agencyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of reviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+
+    post:
+      tags:
+        - Reviews
+      summary: Create agency review
+      parameters:
+        - name: agencyId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - rating
+                - comment
+              properties:
+                rating:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                  example: 5
+                comment:
+                  type: string
+                  example: "Excellent service!"
+      responses:
+        '201':
+          description: Review created successfully
+
+  # Profile Management
+  /agencyprofiledit:
+    patch:
+      tags:
+        - Agencies
+      summary: Update agency profile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                location:
+                  type: string
+                description:
+                  type: string
+                picture:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Profile updated successfully
+
+  /userprofiledit:
+    patch:
+      tags:
+        - Users
+      summary: Update user profile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                picture:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Profile updated successfully
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          enum: [user, agency, admin]
+        verified:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    Agency:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        location:
+          type: string
+        phoneNumber:
+          type: string
+        rate:
+          type: number
+        verified:
+          type: boolean
+        nbFollowers:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+
+    Trip:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        destination:
+          type: string
+        price:
+          type: number
+        duration:
+          type: string
+        picture:
+          type: string
+        agency:
+          $ref: '#/components/schemas/Agency'
+        createdAt:
+          type: string
+          format: date-time
+
+    Question:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        picture:
+          type: string
+        author:
+          $ref: '#/components/schemas/User'
+        likes:
+          type: integer
+        dislikes:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+
+    Review:
+      type: object
+      properties:
+        _id:
+          type: string
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        comment:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        agency:
+          $ref: '#/components/schemas/Agency'
+        createdAt:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "Error description"
+        errors:
+          type: array
+          items:
+            type: string
