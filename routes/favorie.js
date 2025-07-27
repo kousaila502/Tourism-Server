@@ -1,16 +1,10 @@
-const {Router}= require('express');
+const {Router} = require('express');
 const router = Router();
-const favorieTripsController = require('../controllers/favorieTrips'); 
-const favorieQuestionController = require('../controllers/favorieQuestion')
+const interactionController = require('../controllers/InteractionController');
 
-
-
-router.route('/discuss/questions/:questionid/favorie').post(favorieQuestionController.favoriequestion)
-
-router.route('/news/trips/:tripid/favorie').post(favorieTripsController.favorietrip)
-
-router.route('/Favorie').get(favorieTripsController.getFavorie)
-
-
+// Favorite routes
+router.route('/discuss/questions/:questionid/favorie').post(interactionController.toggleFavorite)
+router.route('/news/trips/:tripid/favorie').post(interactionController.toggleFavorite)
+router.route('/Favorie').get(interactionController.getFavorites)
 
 module.exports = router;

@@ -2,18 +2,20 @@
 
 Backend server for Android tourism application promoting Algerian destinations. Provides REST API for tourist guides, recommendations, social features, and agency integration with secure authentication and data management.
 
-## Features
+## 🚀 Features
 
 - **Tourist Guides**: Comprehensive information about Algerian regions, states, and places
-- **Recommendations**: Personalized tourist place suggestions
+- **Recommendations**: Personalized tourist place suggestions  
 - **Social Platform**: Photo sharing, discussions, and community interactions
 - **Agency Integration**: Travel agency trip posting and management
 - **Authentication**: Secure user registration and login system
 - **File Management**: Image upload and storage capabilities
 - **Review System**: Agency ratings and user feedback
 - **Real-time Interactions**: Like/dislike system and user following
+- **Advanced Search**: Filter content by location, price, date, and more
+- **Unified Architecture**: Streamlined models and controllers for better performance
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 - **Runtime**: Node.js
 - **Framework**: Express.js
@@ -23,44 +25,46 @@ Backend server for Android tourism application promoting Algerian destinations. 
 - **Validation**: Validator.js
 - **Password Hashing**: bcrypt
 
-## Prerequisites
+## 📋 Prerequisites
 
 - Node.js (v14 or higher)
 - MongoDB (v4.4 or higher)
 - npm or yarn package manager
 
-## Installation
+## ⚡ Quick Start
 
-1. Clone the repository
+1. **Clone the repository**
 ```bash
 git clone https://github.com/kousaila502/Tourism-Server.git
 cd Tourism-Server
 ```
 
-2. Install dependencies
+2. **Install dependencies**
 ```bash
 npm install
 ```
 
-3. Create environment variables file
+3. **Environment setup**
 ```bash
 cp .env.example .env
 ```
 
-4. Configure environment variables in `.env`
+4. **Configure environment variables in `.env`**
 ```env
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/tourism_db
-JWT_SECRET=your_jwt_secret_key
+JWT_SECRET=your_super_secret_jwt_key_here
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_email_password
 NODE_ENV=development
 ```
 
-5. Create uploads directory
+5. **Create uploads directory**
 ```bash
 mkdir uploads
 ```
 
-6. Start the server
+6. **Start the server**
 ```bash
 # Development mode
 npm run dev
@@ -69,227 +73,234 @@ npm run dev
 npm start
 ```
 
-## API Endpoints
+7. **Verify installation**
+- Health check: `http://localhost:5000/health`
+- API documentation: `http://localhost:5000/api`
 
-### Authentication
-- `POST /login` - User/Agency login
-- `POST /signupAgency` - Agency registration
-- `POST /signupUser` - User registration
-- `GET /logout` - User logout
-- `POST /verifyotp` - Email verification
-- `POST /resendOTPVerification` - Resend OTP
+## 📡 API Endpoints
 
-### Trip Management
-- `GET /news/trips` - Get all trips
-- `POST /news/trips` - Create trip (agencies only)
-- `GET /news/trips/:id` - Get single trip
-- `PATCH /news/trips/:id` - Update trip
-- `DELETE /news/trips/:id` - Delete trip
+> **Note**: All endpoints are prefixed with `/api/v1`
 
-### Discussion Forum
-- `GET /discuss/questions` - Get all questions
-- `POST /discuss/questions` - Create question
-- `GET /discuss/questions/:id` - Get single question
-- `PATCH /discuss/questions/:id` - Update question
-- `DELETE /discuss/questions/:id` - Delete question
+### 🔐 Authentication
+- `POST /api/v1/login` - User/Agency login
+- `POST /api/v1/signupAgency` - Agency registration
+- `POST /api/v1/signupUser` - User registration
+- `GET /api/v1/logout` - User logout
+- `POST /api/v1/verifyotp` - Email verification
+- `POST /api/v1/resendOTPVerification` - Resend OTP
+- `POST /api/v1/forgotpassword` - Password reset
+- `POST /api/v1/setnewpassword` - Set new password
 
-### Replies
-- `GET /discuss/questions/:questionId/reply` - Get replies
-- `POST /discuss/questions/:questionId/reply` - Create reply
-- `PATCH /discuss/questions/:questionId/reply/:replyId` - Update reply
-- `DELETE /discuss/questions/:questionId/reply/:replyId` - Delete reply
+### 🧳 Trip Management
+- `GET /api/v1/news/trips` - Get all trips
+- `POST /api/v1/news/trips` - Create trip (agencies only)
+- `GET /api/v1/news/trips/:id` - Get single trip
+- `PATCH /api/v1/news/trips/:id` - Update trip
+- `DELETE /api/v1/news/trips/:id` - Delete trip
 
-### Reactions
-- `POST /discuss/questions/:id/like` - Like question
-- `POST /discuss/questions/:id/dislike` - Dislike question
-- `POST /news/trips/:id/like` - Like trip
-- `POST /news/trips/:id/dislike` - Dislike trip
+### 💬 Discussion Forum
+- `GET /api/v1/discuss/questions` - Get all questions
+- `POST /api/v1/discuss/questions` - Create question
+- `GET /api/v1/discuss/questions/:id` - Get single question
+- `PATCH /api/v1/discuss/questions/:id` - Update question
+- `DELETE /api/v1/discuss/questions/:id` - Delete question
 
-### Stories
-- `GET /story/:locationId` - Get location stories
-- `POST /story/:locationId` - Create story
-- `DELETE /story/:locationId/:pictureId` - Delete story
-- `PATCH /story/:locationId/:pictureId` - Update story
+### 💭 Replies & Interactions
+- `GET /api/v1/discuss/questions/:questionId/reply` - Get replies
+- `POST /api/v1/discuss/questions/:questionId/reply` - Create reply
+- `PATCH /api/v1/discuss/questions/:questionId/reply/:replyId` - Update reply
+- `DELETE /api/v1/discuss/questions/:questionId/reply/:replyId` - Delete reply
 
-### Reviews
-- `GET /agency/:agencyId/reviews` - Get agency reviews
-- `POST /agency/:agencyId/reviews` - Create review
-- `PATCH /agency/:agencyId/reviews/:id` - Update review
-- `DELETE /agency/:agencyId/reviews/:id` - Delete review
+### 👍 Reactions
+- `POST /api/v1/discuss/questions/:id/like` - Like question
+- `POST /api/v1/discuss/questions/:id/dislike` - Dislike question
+- `POST /api/v1/news/trips/:id/like` - Like trip
+- `POST /api/v1/news/trips/:id/dislike` - Dislike trip
 
-### Social Features
-- `POST /agency/:agencyId/follow` - Follow agency
-- `POST /news/trips/:tripId/favorie` - Favorite trip
-- `POST /discuss/questions/:questionId/favorie` - Favorite question
-- `GET /Favorie` - Get user favorites
+### 📸 Stories
+- `GET /api/v1/story/:locationId` - Get location stories
+- `POST /api/v1/story/:locationId` - Create story
+- `DELETE /api/v1/story/:locationId/:pictureId` - Delete story
+- `PATCH /api/v1/story/:locationId/:pictureId` - Update story
 
-### Profile Management
-- `PATCH /agencyprofiledit` - Update agency profile
-- `PATCH /userprofiledit` - Update user profile
+### ⭐ Reviews
+- `GET /api/v1/agency/:agencyId/reviews` - Get agency reviews
+- `POST /api/v1/agency/:agencyId/reviews` - Create review
+- `PATCH /api/v1/agency/:agencyId/reviews/:id` - Update review
+- `DELETE /api/v1/agency/:agencyId/reviews/:id` - Delete review
 
-### Utilities
-- `GET /filter` - Filter content
-- `POST /forgetpassword/validation` - Validate email for password reset
-- `POST /forgetpassword/sendmail` - Send password reset email
-- `POST /forgetpassword/setnewpass` - Set new password
+### 👥 Social Features
+- `POST /api/v1/agency/:agencyId/follow` - Follow agency
+- `POST /api/v1/news/trips/:tripId/favorie` - Favorite trip
+- `POST /api/v1/discuss/questions/:questionId/favorie` - Favorite question
+- `GET /api/v1/Favorie` - Get user favorites
 
-## Database Models
+### 👤 Profile Management
+- `PATCH /api/v1/userprofiledit` - Update user profile
+- `PATCH /api/v1/agencyprofiledit` - Update agency profile
+- `GET /api/v1/profile/:userId?` - Get user profile
+- `GET /api/v1/users/search` - Search users
 
-### Agency
-- name, email, password, location
-- phoneNumber, rate, picture
-- certification, classification
-- followers count, verification status
+### 🔍 Search & Discovery
+- `GET /api/v1/filter` - Advanced filtering
+- `GET /api/v1/search` - Universal search
+- `GET /api/v1/search/trips` - Search trips
+- `GET /api/v1/search/questions` - Search questions
+- `GET /api/v1/trending` - Get trending content
 
-### User
-- name, email, password
-- profile picture, verification status
-- role-based access control
+## 🗄️ Database Models
 
-### Trip
-- title, description, destination
-- price, duration, pictures
-- agency reference, timestamps
+### User (Unified)
+Handles both regular users and travel agencies:
+- Basic info: name, email, password, location
+- Profile: picture, description, phone number
+- Role-based: User, Agency, Admin
+- Social: followers count, verification status
+- Agency-specific: certification, classification, rating
 
-### Question
-- title, content, pictures
-- author reference, reactions count
-- creation and update timestamps
+### Content (Unified)
+Manages all content types with a `type` field:
+- **Trip**: destination, price, duration, meeting place
+- **Question**: discussion text and tags
+- **Story**: location-based photo sharing
+- Common: text, picture, tags, author info, engagement metrics
 
-### Reply
-- content, pictures
-- question/trip reference, author
-- reaction counts, timestamps
+### Interaction (Unified)
+Handles all user interactions:
+- **Like/Dislike**: Content reactions
+- **Reply**: Comments on content
+- **Review**: Agency ratings and feedback
+- Smart targeting system with automatic counting
 
-### Story
-- location reference, pictures
-- author information, timestamps
-- interaction capabilities
+### Relationship (Unified)
+Manages user relationships:
+- **Follow**: User following system
+- **Favorite**: Content bookmarking
+- Reference-based (no data duplication)
 
-### Review
-- rating (1-5), comment
-- agency and user references
-- timestamps
+### Location
+Simple location reference data for Algerian regions.
 
-## File Upload
-
-The server supports file uploads for:
-- Profile pictures (users and agencies)
-- Trip images
-- Question/reply attachments
-- Story photos
-- Agency documentation
-
-Files are stored in the `/uploads` directory.
-
-## Authentication & Authorization
-
-- JWT-based authentication
-- Role-based access control (User, Agency, Admin)
-- Protected routes with middleware
-- OTP email verification
-- Password reset functionality
-
-## Middleware
-
-- **authMiddleware**: JWT token validation
-- **roleMiddleware**: Role-based access control
-- **multer**: File upload handling
-- **CORS**: Cross-origin resource sharing
-- **Express rate limiting**: API protection
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 Tourism-Server/
-├── controllers/        # Request handlers
-├── middleware/         # Custom middleware
-├── models/            # Database schemas
-├── routes/            # API route definitions
-├── uploads/           # File storage
-├── utils/             # Helper functions
-├── app.js             # Express app configuration
-├── server.js          # Server entry point
-└── package.json       # Dependencies
+├── controllers/           # 5 unified controllers (was 15)
+│   ├── authentication.js    # Auth & password reset
+│   ├── ContentController.js # Trips, questions, stories
+│   ├── InteractionController.js # Likes, replies, reviews
+│   ├── UserController.js    # Profiles, follows
+│   └── SearchController.js  # Search & filtering
+├── middleware/           # Custom middleware
+│   ├── authMiddleware.js   # JWT validation
+│   └── roleMiddleware.js   # Role-based access
+├── models/              # 5 unified models (was 13)
+│   ├── User.js           # Users & agencies
+│   ├── Content.js        # All content types
+│   ├── Interaction.js    # All interactions
+│   ├── Relationship.js   # Follows & favorites
+│   └── Location.js       # Location data
+├── routes/              # API route definitions
+├── uploads/             # File storage
+├── app.js              # Express app configuration
+└── package.json        # Dependencies
 ```
 
-## Development
+## 🔧 Development
 
-### Running Tests
+### Running the Server
 ```bash
-npm test
+# Development with hot reload
+npm run dev
+
+# Production mode
+npm start
 ```
 
-### Code Formatting
-```bash
-npm run format
+### API Testing
+- **Health Check**: `GET /health`
+- **API Info**: `GET /api`
+- **Swagger Docs**: Available via swagger.yaml
+
+### Environment Variables
+```env
+# Server
+PORT=5000
+NODE_ENV=development
+
+# Database
+MONGODB_URI=mongodb://localhost:27017/tourism_db
+
+# Authentication
+JWT_SECRET=your_super_secret_jwt_key_here
+
+# Email (for OTP)
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_email_password
+
+# File Upload
+MAX_FILE_SIZE=5242880
+ALLOWED_FILE_TYPES=jpg,jpeg,png,gif
 ```
 
-### Linting
-```bash
-npm run lint
+## 🚀 Deployment
+
+### Production Setup
+1. Set `NODE_ENV=production`
+2. Use strong JWT_SECRET
+3. Configure production MongoDB URI
+4. Set up reverse proxy (Nginx)
+5. Configure SSL certificates
+6. Set up PM2 for process management
+
+### Docker Support
+```dockerfile
+# Coming soon - Docker configuration
 ```
 
-## Deployment
+## 🔒 Security Features
 
-### Environment Setup
-1. Set production environment variables
-2. Configure MongoDB connection
-3. Set up file storage (local or cloud)
-4. Configure CORS for client domains
+- **Authentication**: JWT with refresh tokens
+- **Authorization**: Role-based access control
+- **Password Security**: bcrypt hashing with salt
+- **Input Validation**: Comprehensive request validation
+- **File Upload Security**: Type and size restrictions
+- **CORS Protection**: Configurable origins
+- **Rate Limiting**: API protection (configurable)
 
-### Production Considerations
-- Use PM2 for process management
-- Set up reverse proxy (Nginx)
-- Configure SSL certificates
-- Implement logging and monitoring
-- Set up automated backups
+## 📊 Performance Features
 
-## API Documentation
+- **Unified Models**: Reduced database queries
+- **Smart Indexing**: Optimized database performance  
+- **Efficient Relationships**: Reference-based instead of data duplication
+- **Caching Strategy**: Prepared for Redis integration
+- **Request Optimization**: Pagination and field selection
 
-Interactive API documentation is available via Swagger UI:
-- Development: `http://localhost:5000/api-docs`
-- View swagger.yaml file for complete API specification
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create feature branch (`git checkout -b feature/new-feature`)
-3. Commit changes (`git commit -am 'Add new feature'`)
-4. Push to branch (`git push origin feature/new-feature`)
-5. Create Pull Request
-
-## Error Handling
-
-The API returns consistent error responses:
-```json
-{
-  "success": false,
-  "message": "Error description",
-  "errors": ["Specific error details"]
-}
-```
-
-Common HTTP status codes:
-- `200` - Success
-- `201` - Created
-- `400` - Bad Request
-- `401` - Unauthorized
-- `403` - Forbidden
-- `404` - Not Found
-- `500` - Internal Server Error
-
-## Security Features
-
-- Password hashing with bcrypt
-- JWT token authentication
-- Input validation and sanitization
-- File upload restrictions
-- Rate limiting
-- CORS protection
-- SQL injection prevention
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 
-## Contact
+## 🆘 Support
 
-For questions or support, please open an issue on GitHub or contact the development team.
+- **Issues**: [GitHub Issues](https://github.com/kousaila502/Tourism-Server/issues)
+- **Documentation**: Available in `/docs`
+- **API Reference**: `http://localhost:5000/api`
+
+## 🎯 Roadmap
+
+- [ ] Real-time notifications with WebSockets
+- [ ] Redis caching implementation
+- [ ] Docker containerization
+- [ ] Automated testing suite
+- [ ] API rate limiting
+- [ ] Advanced analytics dashboard
+- [ ] Mobile app SDK
+
+---
+
+**Built for promoting Algerian tourism**

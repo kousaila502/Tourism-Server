@@ -1,7 +1,7 @@
-const {Router}= require('express');
+const {Router} = require('express');
 const router = Router();
-const tripReplyController = require('../controllers/tripReply');     
-      
+const interactionController = require('../controllers/InteractionController');
+
 const multer = require('multer')
 
 const Storage = multer.diskStorage({
@@ -15,21 +15,14 @@ const Storage = multer.diskStorage({
 
 const upload = multer({storage: Storage})
 
-
-
-
-
+// Trip reply routes
 router.route('/news/trips/:tripid/reply/:replyId')
-            .delete(tripReplyController.deleteReply)
-            .patch(upload.single('picture'),tripReplyController.updateReply)
-            .get(tripReplyController.getsinglereply)
+            .delete(interactionController.deleteReply)
+            .patch(upload.single('picture'),interactionController.updateReply)
+            .get(interactionController.getSingleReply)
+
 router.route('/news/trips/:tripid/reply')
-            .get(tripReplyController.getReply)
-            .post(upload.single('picture'),tripReplyController.createReply)
-
-
-
-
-
+            .get(interactionController.getReplies)
+            .post(upload.single('picture'),interactionController.createReply)
 
 module.exports = router;
