@@ -34,7 +34,7 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   res.header('Access-Control-Allow-Credentials', 'true');
-  
+
   if (req.method === 'OPTIONS') {
     res.sendStatus(200);
   } else {
@@ -46,22 +46,22 @@ app.use((req, res, next) => {
 app.use('/api/v1', [
   // Authentication routes
   authRoutes,
-  
+
   // Content management routes
   tripsRoutes,
   questionsRoutes,
   storyRoutes,
-  
+
   // Interaction routes
   replyRoutes,
   tripReplyRoutes,
   reviewsRoutes,
   reactionRoutes,
   favoriteRoutes,
-  
+
   // User management routes
   userManagementRoutes,
-  
+
   // Search and discovery routes
   searchRoutes
 ]);
@@ -105,7 +105,7 @@ app.use('*', (req, res) => {
 // Global error handler
 app.use((error, req, res, next) => {
   console.error('Global Error:', error);
-  
+
   res.status(error.status || 500).json({
     success: false,
     message: error.message || 'Internal server error',
@@ -120,10 +120,10 @@ const connectDB = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    
+
     console.log('✅ Connected to MongoDB');
     console.log(`📦 Database: ${mongoose.connection.name}`);
-    
+
   } catch (error) {
     console.error('❌ MongoDB connection error:', error.message);
     process.exit(1);
@@ -141,7 +141,7 @@ process.on('SIGINT', async () => {
 // Start server
 const startServer = async () => {
   await connectDB();
-  
+
   const PORT = process.env.PORT || 5000;
   const server = app.listen(PORT, () => {
     console.log(`🚀 Tourism Server running on port ${PORT}`);
@@ -149,7 +149,7 @@ const startServer = async () => {
     console.log(`📋 API Documentation: http://localhost:${PORT}/api`);
     console.log(`💊 Health Check: http://localhost:${PORT}/health`);
   });
-  
+
   // Handle server errors
   server.on('error', (error) => {
     if (error.code === 'EADDRINUSE') {
