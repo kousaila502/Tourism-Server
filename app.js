@@ -5,6 +5,8 @@ require('dotenv').config();
 // Import middleware
 const cookieParser = require('cookie-parser');
 const { requireAuth } = require('./middleware/authMiddleware');
+const { errorHandler, asyncResponseHandler } = require('./middleware/errorHandler');
+const { corsMiddleware } = require('./middleware/corsConfig');
 
 // Import route modules
 const authRoutes = require('./routes/authentication');
@@ -55,19 +57,11 @@ app.use(express.static('public'));
 app.use('/uploads', express.static('uploads')); // Serve uploaded files
 app.use(cookieParser());
 
-// CORS middleware (add if needed for frontend)
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', process.env.CORS_ORIGIN || '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Allow-Credentials', 'true');
+// Professional CORS configuration (replaces the manual CORS headers)
+app.use(corsMiddleware);
 
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-  } else {
-    next();
-  }
-});
+// Async error handling middleware - Add BEFORE routes
+app.use(asyncResponseHandler);
 
 // Apply stricter rate limiting to auth routes only
 app.use('/login', authLimiter);
@@ -135,16 +129,8 @@ app.use('*', (req, res) => {
   });
 });
 
-// Global error handler
-app.use((error, req, res, next) => {
-  console.error('Global Error:', error);
-
-  res.status(error.status || 500).json({
-    success: false,
-    message: error.message || 'Internal server error',
-    ...(process.env.NODE_ENV === 'development' && { stack: error.stack })
-  });
-});
+// Use the error handler middleware (this should be LAST)
+app.use(errorHandler);
 
 // Database connection with enhanced error handling
 const connectDB = async () => {
