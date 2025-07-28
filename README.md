@@ -1,306 +1,292 @@
-# Tourism Server
+# 🏛️ Algerian Tourism API
 
-Backend server for Android tourism application promoting Algerian destinations. Provides REST API for tourist guides, recommendations, social features, and agency integration with secure authentication and data management.
+> **Professional REST API for promoting Algerian destinations with social features and travel agency integration**
 
-## 🚀 Features
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-4.18+-blue.svg)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-6.0+-green.svg)](https://www.mongodb.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![API Version](https://img.shields.io/badge/API-v1.0.0-brightgreen.svg)](https://github.com/kousaila502/algerian-tourism-api)
 
-- **Tourist Guides**: Comprehensive information about Algerian regions, states, and places
-- **Recommendations**: Personalized tourist place suggestions  
-- **Social Platform**: Photo sharing, discussions, and community interactions
-- **Agency Integration**: Travel agency trip posting and management
-- **Authentication**: Secure user registration and login system
-- **File Management**: Image upload and storage capabilities
-- **Review System**: Agency ratings and user feedback
-- **Real-time Interactions**: Like/dislike system and user following
-- **Advanced Search**: Filter content by location, price, date, and more
-- **Unified Architecture**: Streamlined models and controllers for better performance
+## 📖 Overview
 
-## 🛠️ Tech Stack
+A comprehensive backend server for Android tourism applications, designed to showcase Algeria's rich cultural heritage and stunning destinations. The API provides secure authentication, content management, social features, and travel agency integration.
 
-- **Runtime**: Node.js
-- **Framework**: Express.js
-- **Database**: MongoDB with Mongoose ODM
-- **Authentication**: JWT (JSON Web Tokens)
-- **File Upload**: Multer middleware
-- **Validation**: Validator.js
-- **Password Hashing**: bcrypt
+### 🎯 **Key Features**
 
-## 📋 Prerequisites
+- 🏛️ **Tourist Destinations** - Complete guides for Algerian regions and landmarks
+- 📱 **Social Platform** - Stories, discussions, and community engagement
+- 🏢 **Agency Integration** - Travel agency management and trip booking
+- 🔐 **Secure Authentication** - JWT-based auth with role-based access control
+- 📸 **Media Management** - Secure file uploads with validation
+- ⭐ **Review System** - Agency ratings and user feedback
+- 🔍 **Advanced Search** - Intelligent filtering and discovery
+- 📄 **Pagination** - Efficient data loading for mobile apps
 
-- Node.js (v14 or higher)
-- MongoDB (v4.4 or higher)
-- npm or yarn package manager
+### 🏗️ **Architecture Highlights**
 
-## ⚡ Quick Start
+- **Unified Data Models** - Streamlined from 13 to 5 models (60% code reduction)
+- **Professional Error Handling** - Comprehensive error management
+- **Rate Limiting** - API abuse protection
+- **Input Validation** - Robust data validation
+- **CORS Support** - Production-ready cross-origin configuration
 
-1. **Clone the repository**
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Node.js** 18+ and **npm**
+- **MongoDB** 6.0+ (local or Atlas)
+- **Git** for version control
+
+### Installation
+
 ```bash
-git clone https://github.com/kousaila502/Tourism-Server.git
-cd Tourism-Server
-```
+# Clone the repository
+git clone https://github.com/kousaila502/algerian-tourism-api.git
+cd algerian-tourism-api
 
-2. **Install dependencies**
-```bash
+# Install dependencies
 npm install
-```
 
-3. **Environment setup**
-```bash
+# Set up environment variables
 cp .env.example .env
-```
+# Edit .env with your configuration
 
-4. **Configure environment variables in `.env`**
-```env
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/tourism_db
-JWT_SECRET=your_super_secret_jwt_key_here
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_email_password
-NODE_ENV=development
-```
-
-5. **Create uploads directory**
-```bash
+# Create uploads directory
 mkdir uploads
-```
 
-6. **Start the server**
-```bash
-# Development mode
+# Start development server
 npm run dev
-
-# Production mode
-npm start
 ```
 
-7. **Verify installation**
-- Health check: `http://localhost:5000/health`
-- API documentation: `http://localhost:5000/api`
+### Environment Setup
 
-## 📡 API Endpoints
+Create a `.env` file in the root directory:
 
-> **Note**: All endpoints are prefixed with `/api/v1`
-
-### 🔐 Authentication
-- `POST /api/v1/login` - User/Agency login
-- `POST /api/v1/signupAgency` - Agency registration
-- `POST /api/v1/signupUser` - User registration
-- `GET /api/v1/logout` - User logout
-- `POST /api/v1/verifyotp` - Email verification
-- `POST /api/v1/resendOTPVerification` - Resend OTP
-- `POST /api/v1/forgotpassword` - Password reset
-- `POST /api/v1/setnewpassword` - Set new password
-
-### 🧳 Trip Management
-- `GET /api/v1/news/trips` - Get all trips
-- `POST /api/v1/news/trips` - Create trip (agencies only)
-- `GET /api/v1/news/trips/:id` - Get single trip
-- `PATCH /api/v1/news/trips/:id` - Update trip
-- `DELETE /api/v1/news/trips/:id` - Delete trip
-
-### 💬 Discussion Forum
-- `GET /api/v1/discuss/questions` - Get all questions
-- `POST /api/v1/discuss/questions` - Create question
-- `GET /api/v1/discuss/questions/:id` - Get single question
-- `PATCH /api/v1/discuss/questions/:id` - Update question
-- `DELETE /api/v1/discuss/questions/:id` - Delete question
-
-### 💭 Replies & Interactions
-- `GET /api/v1/discuss/questions/:questionId/reply` - Get replies
-- `POST /api/v1/discuss/questions/:questionId/reply` - Create reply
-- `PATCH /api/v1/discuss/questions/:questionId/reply/:replyId` - Update reply
-- `DELETE /api/v1/discuss/questions/:questionId/reply/:replyId` - Delete reply
-
-### 👍 Reactions
-- `POST /api/v1/discuss/questions/:id/like` - Like question
-- `POST /api/v1/discuss/questions/:id/dislike` - Dislike question
-- `POST /api/v1/news/trips/:id/like` - Like trip
-- `POST /api/v1/news/trips/:id/dislike` - Dislike trip
-
-### 📸 Stories
-- `GET /api/v1/story/:locationId` - Get location stories
-- `POST /api/v1/story/:locationId` - Create story
-- `DELETE /api/v1/story/:locationId/:pictureId` - Delete story
-- `PATCH /api/v1/story/:locationId/:pictureId` - Update story
-
-### ⭐ Reviews
-- `GET /api/v1/agency/:agencyId/reviews` - Get agency reviews
-- `POST /api/v1/agency/:agencyId/reviews` - Create review
-- `PATCH /api/v1/agency/:agencyId/reviews/:id` - Update review
-- `DELETE /api/v1/agency/:agencyId/reviews/:id` - Delete review
-
-### 👥 Social Features
-- `POST /api/v1/agency/:agencyId/follow` - Follow agency
-- `POST /api/v1/news/trips/:tripId/favorie` - Favorite trip
-- `POST /api/v1/discuss/questions/:questionId/favorie` - Favorite question
-- `GET /api/v1/Favorie` - Get user favorites
-
-### 👤 Profile Management
-- `PATCH /api/v1/userprofiledit` - Update user profile
-- `PATCH /api/v1/agencyprofiledit` - Update agency profile
-- `GET /api/v1/profile/:userId?` - Get user profile
-- `GET /api/v1/users/search` - Search users
-
-### 🔍 Search & Discovery
-- `GET /api/v1/filter` - Advanced filtering
-- `GET /api/v1/search` - Universal search
-- `GET /api/v1/search/trips` - Search trips
-- `GET /api/v1/search/questions` - Search questions
-- `GET /api/v1/trending` - Get trending content
-
-## 🗄️ Database Models
-
-### User (Unified)
-Handles both regular users and travel agencies:
-- Basic info: name, email, password, location
-- Profile: picture, description, phone number
-- Role-based: User, Agency, Admin
-- Social: followers count, verification status
-- Agency-specific: certification, classification, rating
-
-### Content (Unified)
-Manages all content types with a `type` field:
-- **Trip**: destination, price, duration, meeting place
-- **Question**: discussion text and tags
-- **Story**: location-based photo sharing
-- Common: text, picture, tags, author info, engagement metrics
-
-### Interaction (Unified)
-Handles all user interactions:
-- **Like/Dislike**: Content reactions
-- **Reply**: Comments on content
-- **Review**: Agency ratings and feedback
-- Smart targeting system with automatic counting
-
-### Relationship (Unified)
-Manages user relationships:
-- **Follow**: User following system
-- **Favorite**: Content bookmarking
-- Reference-based (no data duplication)
-
-### Location
-Simple location reference data for Algerian regions.
-
-## 📁 Project Structure
-
-```
-Tourism-Server/
-├── controllers/           # 5 unified controllers (was 15)
-│   ├── authentication.js    # Auth & password reset
-│   ├── ContentController.js # Trips, questions, stories
-│   ├── InteractionController.js # Likes, replies, reviews
-│   ├── UserController.js    # Profiles, follows
-│   └── SearchController.js  # Search & filtering
-├── middleware/           # Custom middleware
-│   ├── authMiddleware.js   # JWT validation
-│   └── roleMiddleware.js   # Role-based access
-├── models/              # 5 unified models (was 13)
-│   ├── User.js           # Users & agencies
-│   ├── Content.js        # All content types
-│   ├── Interaction.js    # All interactions
-│   ├── Relationship.js   # Follows & favorites
-│   └── Location.js       # Location data
-├── routes/              # API route definitions
-├── uploads/             # File storage
-├── app.js              # Express app configuration
-└── package.json        # Dependencies
-```
-
-## 🔧 Development
-
-### Running the Server
-```bash
-# Development with hot reload
-npm run dev
-
-# Production mode
-npm start
-```
-
-### API Testing
-- **Health Check**: `GET /health`
-- **API Info**: `GET /api`
-- **Swagger Docs**: Available via swagger.yaml
-
-### Environment Variables
 ```env
-# Server
+# Server Configuration
 PORT=5000
 NODE_ENV=development
 
 # Database
-MONGODB_URI=mongodb://localhost:27017/tourism_db
+MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/TourismDB
 
 # Authentication
 JWT_SECRET=your_super_secret_jwt_key_here
 
-# Email (for OTP)
+# Email Service (for OTP)
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_email_password
 
 # File Upload
 MAX_FILE_SIZE=5242880
-ALLOWED_FILE_TYPES=jpg,jpeg,png,gif
+ALLOWED_FILE_TYPES=jpg,jpeg,png,gif,webp
+
+# CORS Configuration
+FRONTEND_URL=http://localhost:3000
+CORS_ORIGIN=*
+
+# Rate Limiting
+RATE_LIMIT_WINDOW=900000
+RATE_LIMIT_MAX=100
 ```
 
-## 🚀 Deployment
+## 📱 API Documentation
 
-### Production Setup
-1. Set `NODE_ENV=production`
-2. Use strong JWT_SECRET
-3. Configure production MongoDB URI
-4. Set up reverse proxy (Nginx)
-5. Configure SSL certificates
-6. Set up PM2 for process management
+### Base URL
+```
+Development: http://localhost:5000/api/v1
+Production: https://your-domain.com/api/v1
+```
 
-### Docker Support
-```dockerfile
-# Coming soon - Docker configuration
+### Quick API Test
+```bash
+# Health check
+curl http://localhost:5000/health
+
+# Get API info
+curl http://localhost:5000/api
+
+# Get trips with pagination
+curl "http://localhost:5000/api/v1/news/trips?page=1&limit=10"
+```
+
+### 🔑 Authentication
+
+```bash
+# Register new user
+curl -X POST http://localhost:5000/api/v1/signupUser \
+  -F "name=John Doe" \
+  -F "email=user@example.com" \
+  -F "password=password123" \
+  -F "confirmPassword=password123" \
+  -F "location=Algiers, Algeria"
+
+# Login
+curl -X POST http://localhost:5000/api/v1/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"user@example.com","password":"password123"}'
+```
+
+### 📄 Complete Documentation
+
+- **Swagger/OpenAPI**: Available at `/swagger` (when configured)
+- **Postman Collection**: [Download here](docs/Tourism-API.postman_collection.json)
+- **API Reference**: See [API.md](docs/API.md) for detailed endpoint documentation
+
+## 🛠️ Development
+
+### Available Scripts
+
+```bash
+npm run dev          # Start development server with nodemon
+npm start           # Start production server
+npm test            # Run test suite (when configured)
+npm run lint        # Run ESLint (when configured)
+```
+
+### Project Structure
+
+```
+algerian-tourism-api/
+├── controllers/           # Request handlers (5 unified controllers)
+│   ├── authentication.js # Auth, OTP, password reset
+│   ├── ContentController.js # Trips, questions, stories
+│   ├── InteractionController.js # Likes, replies, reviews
+│   ├── UserController.js  # Profiles, follows
+│   └── SearchController.js # Search & filtering
+├── models/               # Database models (5 unified models)
+│   ├── User.js          # Users & agencies (role-based)
+│   ├── Content.js       # All content types (type field)
+│   ├── Interaction.js   # All interactions (type field)
+│   ├── Relationship.js  # Follows & favorites
+│   └── Location.js      # Location data
+├── middleware/          # Custom middleware
+│   ├── authMiddleware.js # JWT validation
+│   ├── roleMiddleware.js # Role-based access
+│   ├── validation.js    # Input validation
+│   ├── errorHandler.js  # Error management
+│   └── corsConfig.js    # CORS configuration
+├── routes/              # API routes
+├── uploads/             # File storage
+├── docs/               # Documentation
+├── app.js              # Express app configuration
+└── server.js           # Server entry point
+```
+
+## 🧪 Testing
+
+### Test Accounts
+
+The API includes pre-configured test accounts for development:
+
+**Test Agencies:**
+- **Sahara Adventures** (Tamanrasset) - `sahara@agency.com:123456`
+- **Atlas Tours** (Algiers) - `atlas@agency.com:123456`
+- **Mediterranean Travels** (Oran) - `med@agency.com:123456`
+
+**Test Users:**
+- **Ahmed Benali** (Algiers) - `ahmed@user.com:123456`
+- **Fatima Cherif** (Constantine) - `fatima@user.com:123456`
+- **Omar Mansouri** (Oran) - `omar@user.com:123456`
+
+### Sample API Calls
+
+```bash
+# Get paginated trips
+curl "http://localhost:5000/api/v1/news/trips?page=1&limit=5"
+
+# Search trips by tags
+curl "http://localhost:5000/api/v1/news/trips?search=@sahara"
+
+# Get questions with pagination
+curl "http://localhost:5000/api/v1/discuss/questions?page=1&limit=10"
+
+# Universal search
+curl "http://localhost:5000/api/v1/search?q=algiers&type=trip"
 ```
 
 ## 🔒 Security Features
 
-- **Authentication**: JWT with refresh tokens
-- **Authorization**: Role-based access control
-- **Password Security**: bcrypt hashing with salt
-- **Input Validation**: Comprehensive request validation
-- **File Upload Security**: Type and size restrictions
-- **CORS Protection**: Configurable origins
-- **Rate Limiting**: API protection (configurable)
+- **JWT Authentication** with refresh tokens
+- **Role-based Authorization** (User, Agency, Admin)
+- **Rate Limiting** (100 req/15min general, 5 req/15min auth)
+- **Input Validation** for all endpoints
+- **File Upload Security** (type validation, size limits)
+- **CORS Protection** with environment-based origins
+- **Password Hashing** using bcrypt
+- **SQL Injection Protection** via Mongoose ODM
 
 ## 📊 Performance Features
 
-- **Unified Models**: Reduced database queries
-- **Smart Indexing**: Optimized database performance  
-- **Efficient Relationships**: Reference-based instead of data duplication
-- **Caching Strategy**: Prepared for Redis integration
-- **Request Optimization**: Pagination and field selection
+- **Pagination** for all list endpoints
+- **Database Indexing** for optimized queries
+- **Efficient File Storage** with unique naming
+- **Memory Management** with request size limits
+- **Graceful Error Handling** without server crashes
+
+## 🌍 Deployment
+
+### Production Checklist
+
+- [ ] Set `NODE_ENV=production` in environment
+- [ ] Configure production database (MongoDB Atlas)
+- [ ] Set up secure JWT secrets
+- [ ] Configure production CORS origins
+- [ ] Set up file storage (AWS S3/Cloudinary)
+- [ ] Configure production email service
+- [ ] Set up monitoring and logging
+- [ ] Configure HTTPS/SSL certificates
+
+### Docker Support (Optional)
+
+```dockerfile
+# Coming soon - Docker configuration for easy deployment
+```
 
 ## 🤝 Contributing
 
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+### Development Workflow
+
 1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+## 📞 Support & Contact
 
-## 🆘 Support
+- **Issues**: [GitHub Issues](https://github.com/kousaila502/algerian-tourism-api/issues)
+- **Documentation**: [Wiki](https://github.com/kousaila502/algerian-tourism-api/wiki)
+- **Email**: kousaila502@example.com
 
-- **Issues**: [GitHub Issues](https://github.com/kousaila502/Tourism-Server/issues)
-- **Documentation**: Available in `/docs`
-- **API Reference**: `http://localhost:5000/api`
+## 📄 License
 
-## 🎯 Roadmap
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## 🙏 Acknowledgments
+
+- **Algeria Tourism Ministry** for destination information
+- **MongoDB** for excellent database solutions
+- **Express.js** community for robust web framework
+- **JWT** for secure authentication standards
+
+## 🗺️ Roadmap
+
+### Version 1.1.0 (Coming Soon)
 - [ ] Real-time notifications with WebSockets
-- [ ] Redis caching implementation
-- [ ] Docker containerization
-- [ ] Automated testing suite
-- [ ] API rate limiting
 - [ ] Advanced analytics dashboard
+- [ ] Multi-language support (Arabic, French, English)
 - [ ] Mobile app SDK
+- [ ] AI-powered recommendations
+
+### Version 1.2.0 (Future)
+- [ ] Payment integration for bookings
+- [ ] Advanced trip planning features
+- [ ] Integration with external booking systems
+- [ ] Machine learning for personalized suggestions
 
 ---
-
-**Built for promoting Algerian tourism**
