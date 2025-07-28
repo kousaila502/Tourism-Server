@@ -37,7 +37,13 @@ const getUserInfo = async (req) => {
 // Get all trips
 const getTrips = async (req, res) => {
     try {
-        let { search } = req.query;
+        let { search, page, limit } = req.query;
+        
+        // Pagination setup
+        const pageNumber = parseInt(page) || 1;
+        const limitNumber = parseInt(limit) || 10; // Default 10 trips per page
+        const skip = (pageNumber - 1) * limitNumber;
+        
         const queryObject = { type: 'trip' };
         let sortList = { createdAt: -1 };
         
@@ -53,11 +59,27 @@ const getTrips = async (req, res) => {
             }
         }
         
-        const trips = await Content.find(queryObject).sort(sortList);
+        // Get total count for pagination info
+        const totalTrips = await Content.countDocuments(queryObject);
+        const totalPages = Math.ceil(totalTrips / limitNumber);
+        
+        // Get paginated trips
+        const trips = await Content.find(queryObject)
+            .sort(sortList)
+            .skip(skip)
+            .limit(limitNumber);
         
         res.status(200).json({
             success: true,
             trips,
+            pagination: {
+                currentPage: pageNumber,
+                totalPages,
+                totalTrips,
+                tripsPerPage: limitNumber,
+                hasNextPage: pageNumber < totalPages,
+                hasPrevPage: pageNumber > 1
+            },
             nbHits: trips.length
         });
     } catch (error) {
@@ -233,7 +255,13 @@ const deleteTrips = async (req, res) => {
 // Get all questions
 const getQuestions = async (req, res) => {
     try {
-        let { search } = req.query;
+        let { search, page, limit } = req.query;
+        
+        // Pagination setup
+        const pageNumber = parseInt(page) || 1;
+        const limitNumber = parseInt(limit) || 10; // Default 10 questions per page
+        const skip = (pageNumber - 1) * limitNumber;
+        
         const queryObject = { type: 'question' };
         let sortList = { createdAt: -1 };
         
@@ -249,11 +277,27 @@ const getQuestions = async (req, res) => {
             }
         }
         
-        const questions = await Content.find(queryObject).sort(sortList);
+        // Get total count for pagination info
+        const totalQuestions = await Content.countDocuments(queryObject);
+        const totalPages = Math.ceil(totalQuestions / limitNumber);
+        
+        // Get paginated questions
+        const questions = await Content.find(queryObject)
+            .sort(sortList)
+            .skip(skip)
+            .limit(limitNumber);
         
         res.status(200).json({
             success: true,
             questions,
+            pagination: {
+                currentPage: pageNumber,
+                totalPages,
+                totalQuestions,
+                questionsPerPage: limitNumber,
+                hasNextPage: pageNumber < totalPages,
+                hasPrevPage: pageNumber > 1
+            },
             nbHits: questions.length
         });
     } catch (error) {
@@ -458,15 +502,40 @@ const createStory = async (req, res) => {
 const getStoriesByLocation = async (req, res) => {
     try {
         const { idLocation } = req.params;
+        const { page, limit } = req.query;
         
+        // Pagination setup
+        const pageNumber = parseInt(page) || 1;
+        const limitNumber = parseInt(limit) || 20; // Default 20 stories per page
+        const skip = (pageNumber - 1) * limitNumber;
+        
+        // Get total count for pagination info
+        const totalStories = await Content.countDocuments({ 
+            type: 'story', 
+            locationId: idLocation 
+        });
+        const totalPages = Math.ceil(totalStories / limitNumber);
+        
+        // Get paginated stories
         const stories = await Content.find({ 
             type: 'story', 
             locationId: idLocation 
-        }).sort({ createdAt: -1 });
+        })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limitNumber);
         
         res.status(200).json({
             success: true,
-            data: stories
+            data: stories,
+            pagination: {
+                currentPage: pageNumber,
+                totalPages,
+                totalStories,
+                storiesPerPage: limitNumber,
+                hasNextPage: pageNumber < totalPages,
+                hasPrevPage: pageNumber > 1
+            }
         });
         
     } catch (error) {
