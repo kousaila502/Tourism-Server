@@ -19,7 +19,34 @@ const favoriteRoutes = require('./routes/favorie');
 const userManagementRoutes = require('./routes/userManagement');
 const searchRoutes = require('./routes/search');
 
+const rateLimit = require('express-rate-limit');
+
+// General API rate limiting
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: {
+    success: false,
+    message: 'Too many requests from this IP, please try again in 15 minutes'
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Strict rate limiting for auth endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: {
+    success: false,
+    message: 'Too many authentication attempts, please try again in 15 minutes'
+  },
+  skipSuccessfulRequests: true,
+});
+
 const app = express();
+
+app.use(apiLimiter);
 
 // Global middleware
 app.use(express.json({ limit: '10mb' }));
@@ -41,6 +68,12 @@ app.use((req, res, next) => {
     next();
   }
 });
+
+// Apply stricter rate limiting to auth routes only
+app.use('/login', authLimiter);
+app.use('/signupAgency', authLimiter);
+app.use('/signupUser', authLimiter);
+app.use('/verifyotp', authLimiter);
 
 // API Routes
 app.use('/api/v1', [

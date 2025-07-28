@@ -1,6 +1,8 @@
 const {Router}= require('express');
 const router = Router();
-const authController = require('../controllers/authentication');            
+const authController = require('../controllers/authentication');        
+const { validateSignup, validateLogin } = require('../middleware/validation');
+
 
 const multer = require('multer')
 
@@ -15,10 +17,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage: storage})
 
-router.post('/login',authController.postLogin)
-router.post('/signupAgency',upload.single('photo'),authController.postSignUp)
-router.patch('/signupAgencyf',upload.array('documents',2),authController.updateSignUp)
-router.post('/signupUser', upload.single('photo'),authController.postSignupUser)
+router.post('/login', validateLogin, authController.postLogin)
+router.post('/signupAgency',upload.single('photo'), validateSignup, authController.postSignUp)
+router.patch('/signupAgencyf',upload.array('documents',2), validateSignup, authController.updateSignUp)
+router.post('/signupUser', upload.single('photo'), validateSignup, authController.postSignupUser)
 router.get('/logout',authController.getLogout)
 router.post('/verifyotp',authController.verifyOTP)
 router.post('/resendOTPVerification',authController.resendOTPVerification)
